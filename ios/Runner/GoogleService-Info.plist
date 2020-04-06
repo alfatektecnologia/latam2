@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>842384836758-enqtjd8vrkk1tmomb2j59tgigcqje3gs.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.842384836758-enqtjd8vrkk1tmomb2j59tgigcqje3gs</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAJ6wJRBZ2kMJmhWygRZRY4aqTEE24KSog</string>
+	<key>GCM_SENDER_ID</key>
+	<string>842384836758</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.com.alfatektecnologia.latam</string>
+	<key>PROJECT_ID</key>
+	<string>latam-b2916</string>
+	<key>STORAGE_BUCKET</key>
+	<string>latam-b2916.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:842384836758:ios:bfa60937a4b8e066f79ab7</string>
+	<key>DATABASE_URL</key>
+	<string>https://latam-b2916.firebaseio.com</string>
+</dict>
+</plist>

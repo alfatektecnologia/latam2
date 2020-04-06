@@ -1,0 +1,4 @@
+#Mon Mar 30 22:09:04 BRT 2020
+base.0=C\:\\Emanoel\\Latam\\latam\\build\\app\\intermediates\\transforms\\r8\\release\\0\\classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

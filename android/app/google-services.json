@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "842384836758",
+    "firebase_url": "https://latam-b2916.firebaseio.com",
+    "project_id": "latam-b2916",
+    "storage_bucket": "latam-b2916.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842384836758:android:25fc508d49a9b1fdf79ab7",
+        "android_client_info": {
+          "package_name": "br.com.alfatektecnologia.latam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842384836758-03d01nd7h3o3d7v46nt6mp2vmrnud9rq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCz4CwWgS28HgawmpBAB4Ja_DzfzSj-6lA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842384836758-03d01nd7h3o3d7v46nt6mp2vmrnud9rq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
