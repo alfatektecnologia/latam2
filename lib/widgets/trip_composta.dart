@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
 import 'package:latam/widgets/calcular_button.dart';
-import 'package:latam/widgets/data_inicio_jornada2.dart';
-import 'package:latam/widgets/data_inicio_jornada3.dart';
-import 'package:latam/widgets/data_inicio_jornada4.dart';
+import 'package:latam/widgets/dates/data_inicio_jornada2.dart';
+import 'package:latam/widgets/dates/data_inicio_jornada3.dart';
+import 'package:latam/widgets/dates/data_inicio_jornada4.dart';
 
-import 'package:latam/widgets/data_pouso2.dart';
-import 'package:latam/widgets/data_pouso3.dart';
+import 'package:latam/widgets/dates/data_pouso2.dart';
+import 'package:latam/widgets/dates/data_pouso3.dart';
 import 'package:latam/widgets/fusos.dart';
 
-import 'package:latam/widgets/hora_apresentacao2.dart';
-import 'package:latam/widgets/hora_apresentacao4.dart';
+import 'package:latam/widgets/times/hora_apresentacao2.dart';
+import 'package:latam/widgets/times/hora_apresentacao4.dart';
 
-import 'package:latam/widgets/hora_last_pouso2.dart';
-import 'package:latam/widgets/hora_lastpouso3.dart';
+import 'package:latam/widgets/times/hora_last_pouso2.dart';
+import 'package:latam/widgets/times/hora_lastpouso3.dart';
 import 'package:latam/widgets/tipo_funcao.dart';
 import 'package:provider/provider.dart';
 
 import 'fusos2.dart';
-import 'hora_apresentacao3.dart';
+import 'times/hora_apresentacao3.dart';
 
 class TripulacaoComposta extends StatefulWidget {
   @override
@@ -26,11 +26,12 @@ class TripulacaoComposta extends StatefulWidget {
 }
 
 class _TripulacaoCompostaState extends State<TripulacaoComposta> {
-  var _radioValue1 = -1;
-
   @override
   void initState() {
-    Util.resetarVariaveis();
+    // Util.resetarVariaveis();
+    Util.resetarDataHora();
+
+    Util.hasEtapa = false;
     super.initState();
   }
 
@@ -47,68 +48,6 @@ class _TripulacaoCompostaState extends State<TripulacaoComposta> {
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  Center(
-                    child: Text(
-                      'Voo',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xffed1650),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Radio(
-                          value: 0,
-                          groupValue: _radioValue1,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _radioValue1 = newValue;
-                              util.setTipoVoo('Doméstico');
-                              Util.destino = ('DOM');
-                            });
-
-                            print(newValue);
-                          },
-                        ),
-                        Text(
-                          'Doméstico',
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xff858585)),
-                        ),
-                        Radio(
-                          value: 1,
-                          groupValue: _radioValue1,
-                          onChanged: (newValue) {
-                            setState(() {
-                              _radioValue1 = newValue;
-                              util.setTipoVoo('Internacional');
-                              Util.destino = ('INT');
-                            });
-
-                            print(newValue);
-                          },
-                        ),
-                        Text(
-                          'Internacional',
-                          style: TextStyle(
-                              fontSize: 16.0, color: Color(0xff858585)),
-                        ),
-                      ]),
-                  SizedBox(
-                    height: 8,
-                  ),
-/*                 Divider(
-                  height: 5,
-                  color: Color(0xff858585),
-                ), */
-                  /* SizedBox(
-                  height: 8,
-                ), */
                   Util.tipoVoo == 'Doméstico' ? Fusos2() : Fusos(),
                   SizedBox(
                     height: 8,

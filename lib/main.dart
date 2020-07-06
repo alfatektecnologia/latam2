@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 import 'package:latam/pages/login.dart';
 import 'package:latam/pages/rbac_home.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
@@ -89,25 +88,24 @@ class _MyAppState extends State<MyApp> {
 
         debugShowCheckedModeBanner: false,
         title: 'Latam',
-        //color: Colors.deepPurpleAccent,
-
+       
         theme: ThemeData(
           // Define the default brightness and colors.
-          // brightness: Brightness.dark,
+         
           primarySwatch:colorCustom,
           primaryColor: Color(0xff00005a),
           primaryColorDark: Color(0xff00005a),
           primaryColorLight: Color(0xff5831b9),
-          //primaryTextTheme:TextTheme(),
+         
+          primaryTextTheme:TextTheme(),
           accentColor: Color(0xffed1650),
           
-          //bottomSheetTheme:BottomSheetThemeData(c),
           cupertinoOverrideTheme:CupertinoThemeData(
             primaryColor: Color(0xff00005a),
             textTheme:CupertinoTextThemeData(
               textStyle:TextStyle(
                 fontFamily: 'TREBUC',
-                color: Color(0xff00fff)
+                //color: Color(0xff00ffff)
               ),
             ),
           ),
@@ -119,10 +117,11 @@ class _MyAppState extends State<MyApp> {
           // Define the default TextTheme. Use this to specify the default
           // text styling for headlines, titles, bodies of text, and more.
           textTheme: TextTheme(
-            
-            headline: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold,),
-            title: TextStyle(fontSize: 26.0, fontStyle: FontStyle.italic),
-            body1: TextStyle(fontSize: 14.0, fontFamily: 'TREBUC', color:Color(0xff858585)),
+            bodyText1: TextStyle(fontSize: 14.0, fontFamily: 'TREBUC',color:Colors.yellowAccent),
+           
+            headline5: TextStyle(fontSize: 50.0, fontWeight: FontWeight.bold,),
+            headline6: TextStyle(fontSize: 26.0, fontStyle: FontStyle.italic),
+            bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'TREBUC', color:Color(0xff858585)),
             //subhead:TextStyle(fontSize: 14.0, fontFamily: 'TREBUC',color:Colors.yellowAccent),
             
           ),

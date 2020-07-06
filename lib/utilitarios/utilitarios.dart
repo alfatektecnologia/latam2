@@ -1,5 +1,6 @@
 import 'package:latam/models/acesso.dart';
 import 'package:latam/models/jornada.dart';
+
 import 'package:latam/models/usuario.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +16,8 @@ class Util with ChangeNotifier {
   static bool mostraTelaAviso = true;
   static int qdadeCadastros = 0;
   static String docIdLiberado;
+  static bool userAcessoLiberado = false;
+  static bool showRotaSafetyCase = false;
 
   //input data
   static bool hasDataInicio = false;
@@ -28,6 +31,7 @@ class Util with ChangeNotifier {
   static bool hasHoraPouso2 = false;
   static bool hasFuso = false;
   static bool hasFuncao = false;
+  static bool hasSobreAviso = false;
 
   static bool isInputDataValidated = false;
 
@@ -35,14 +39,14 @@ class Util with ChangeNotifier {
 
   static String equipamento;
   static String tripulacao;
-  static String etapas;
-  static String funcao;
-  static String fusos;
-  static String safetyCase;
-  static String sobreaviso;
-  static String acionado;
-  static String destino;
-  static String rotaSafetyCase;
+  static String etapas = "";
+  static String funcao = "";
+  static String fusos = "";
+  static String safetyCase = "";
+  static String sobreaviso = "";
+  static String acionado = "";
+  static String destino = "";
+  static String rotaSafetyCase = "";
   static DateTime horarioInicioSobreaviso;
   static DateTime horarioTerminoSobreaviso;
   static DateTime dataReserva;
@@ -64,6 +68,7 @@ class Util with ChangeNotifier {
   static bool showLastro = true;
   static bool is767FSafety = false;
   static bool tripTTonly = false;
+  static String tipoFuncao;
   static String tipoTripulacao;
   static String tipoVoo;
   static String horaApresentacaoReserva = 'HH:MM';
@@ -89,6 +94,8 @@ class Util with ChangeNotifier {
   static var hasVooVolta = false;
   static var jornada;
   static var voo;
+  static bool lastroNegativo = false;
+  static bool lastro2Negativo = false;
 
   //static bool appStarted = true;
 
@@ -100,6 +107,28 @@ class Util with ChangeNotifier {
   static void gotoScreen(Widget pagina, context) {
     Route route = MaterialPageRoute(builder: (context) => pagina);
     Navigator.push(context, route);
+  }
+
+  static resetarDataHora() {
+    if (!(Util.tipoAcionamentoSobreaviso == 'Reserva + voo')) {
+      hasDataInicio = false;
+      hasDataInicio2 = false;
+      hasDataPouso = false;
+      hasDataPouso2 = false;
+      hasHoraInicio = false;
+      hasHoraInicio2 = false;
+      hasHoraPouso = false;
+      hasHoraPouso2 = false;
+    } else {
+      // hasDataInicio = false;
+      hasDataInicio2 = false;
+      hasDataPouso = false;
+      hasDataPouso2 = false;
+      //hasHoraInicio = false;
+      hasHoraInicio2 = false;
+      hasHoraPouso = false;
+      hasHoraPouso2 = false;
+    }
   }
 
   static resetarVariaveis() {
@@ -162,6 +191,7 @@ class Util with ChangeNotifier {
 
   setTipoVoo(String tipo) {
     tipoVoo = tipo;
+    print(tipoVoo);
     notifyListeners();
   }
 
@@ -351,6 +381,7 @@ class Util with ChangeNotifier {
   static Future<Map<dynamic, dynamic>> getCurrentUserStatus() async {
     var userData = Map();
     bool result = false;
+    List<Acesso> _liberado = List();
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser user = await auth.currentUser(); //checa se existe user logado
     userData['user'] = user;
@@ -358,19 +389,16 @@ class Util with ChangeNotifier {
       userID = user.uid;
       userEmail = user.email;
       try {
+        userData['liberado'] =
+            _liberado = await getAcessoByEmail(userEmail.toLowerCase());
         getUserByEmail(userEmail); //used to get mostraaviso..
       } catch (e) {
         print(e.toString() + 'erro getting userByemail in getcurrent user ');
       }
-
-      //only for test
-      /*       Usuario usuario =
-            Usuario(email: user.email, id: userID, isAdmin: false);
-  
-        Util.salvarDados('usuarios', user.uid, usuario.toMap()); */
     }
 
-    if (user != null) {
+    if (_liberado.length > 0) {
+      userAcessoLiberado = true;
       result = await userIsAdmin(user.uid);
       userData['admin'] = result;
 
@@ -381,6 +409,8 @@ class Util with ChangeNotifier {
       userData['admin'] = result;
     }
 
+    _liberado.length > 0 ? print(_liberado[0].email) : print(Null);
+    print(Util.userAcessoLiberado);
     return userData;
   }
 
@@ -419,12 +449,11 @@ class Util with ChangeNotifier {
   }
 
   //salvar dados cadastro
-  static Future salvarDadosCadastro(
-      String collection, String uid, Map dados) async {
+  static Future salvarDadosEmailsLiberados(String collection, Map dados) async {
     firestore.collection(collection).add(dados).then((value) {
       //print('dados salvos com sucesso');
     }).catchError((e) {
-      // print(e);
+      print(e);
     });
   }
 
@@ -619,17 +648,17 @@ class Util with ChangeNotifier {
     )..show(context);
   }
 
-  static validate(String tipoTripulacao, context) {
+  static validate(String tipoTripulacao, String tipoSobreaviso, context) {
     switch (tipoTripulacao) {
       case 'Simples':
         if (!hasDataInicio) {
           showFlushbar(context, 'Preencher a data de início da jornada!');
         } else if (!hasHoraInicio) {
           showFlushbar(context, 'Preencher o horário de início da jornada!');
-        } else if (!hasEtapa) {
-          showFlushbar(context, 'Escolher uma etapa!');
+        } else if (!hasEtapa && !showRotaSafetyCase) {
+          showFlushbar(context, 'Escolher n° de etapas!');
         } else if (!hasDataPouso) {
-          showFlushbar(context, 'Preencher a data prevista do pouso!');
+          showFlushbar(context, 'Preencher a data do pouso!');
         } else if (!hasHoraPouso) {
           showFlushbar(context, 'Preencher o horário previsto do pouso!');
         } else {
@@ -639,24 +668,34 @@ class Util with ChangeNotifier {
         break;
       case 'Composta': //função??? apagar dados
         if (!hasDataInicio) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data de início da jornada!');
         } else if (!hasHoraInicio) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher o horário de início da jornada!');
         } else if (!hasDataPouso) {
-          showFlushbar(context, 'Preencher a data prevista do pouso!');
-        } else if (!hasHoraPouso) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher a data do pouso!');
+        } else if (!hasHoraPouso){
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher o horário previsto do pouso!');
         } else if (!hasFuso) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Escolher qdade de fusos!');
         } else if (!hasFuncao) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Escolher tipo de função!');
         } else if (!hasDataInicio2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data de volta da jornada!');
         } else if (!hasHoraInicio2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher o horário de volta da jornada!');
         } else if (!hasDataPouso2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data prevista do pouso de volta!');
         } else if (!hasHoraPouso2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(
               context, 'Preencher o horário previsto do pouso de volta!');
         } else {
@@ -666,24 +705,34 @@ class Util with ChangeNotifier {
         break;
       case 'Revezamento':
         if (!hasDataInicio) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data de início da jornada!');
         } else if (!hasHoraInicio) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher o horário de início da jornada!');
         } else if (!hasDataPouso) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data prevista do pouso!');
         } else if (!hasHoraPouso) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher o horário previsto do pouso!');
         } else if (!hasFuso) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Escolher qdade de fusos!');
         } else if (!hasFuncao) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Escolher tipo de função!');
         } else if (!hasDataInicio2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data de volta da jornada!');
         } else if (!hasHoraInicio2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher o horário de volta da jornada!');
         } else if (!hasDataPouso2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(context, 'Preencher a data prevista do pouso de volta!');
         } else if (!hasHoraPouso2 && hasVooVolta) {
+          isInputDataValidated = false;
           showFlushbar(
               context, 'Preencher o horário previsto do pouso de volta!');
         } else {
@@ -692,7 +741,48 @@ class Util with ChangeNotifier {
 
         break;
       default:
-        isInputDataValidated = false;
+        if (Util.showRotaSafetyCase) {
+          if (!hasDataInicio) {
+            isInputDataValidated = false;
+            showFlushbar(context, 'Preencher a data de início da jornada!');
+          } else if (!hasHoraInicio) {
+            isInputDataValidated = false;
+            showFlushbar(context, 'Preencher o horário de início da jornada!');
+          } else {
+            isInputDataValidated = true;
+          }
+        }
+
+      //isInputDataValidated = false;
+
     }
+    if (hasSobreAviso) {
+      //isInputDataValidated = true;
+    } else {
+      showFlushbar(context, 'Acionado no sobreaviso?');
+      isInputDataValidated = false;
+    }
+
+   /* if (hasFuncao) {//????
+      isInputDataValidated = true;
+    } else {
+      showFlushbar(context, 'Acionado em sobreaviso?');
+      isInputDataValidated = false;
+    }*/
   }
+
+//color custom
+  static Map<int, Color> color = {
+    50: Color.fromRGBO(0, 0, 90, .1),
+    100: Color.fromRGBO(0, 0, 90, .2),
+    200: Color.fromRGBO(0, 0, 90, .3),
+    300: Color.fromRGBO(0, 0, 90, .4),
+    400: Color.fromRGBO(0, 0, 90, .5),
+    500: Color.fromRGBO(0, 0, 90, .6),
+    600: Color.fromRGBO(0, 0, 90, .7),
+    700: Color.fromRGBO(0, 0, 90, .8),
+    800: Color.fromRGBO(0, 0, 90, .9),
+    900: Color.fromRGBO(0, 0, 90, 1),
+  };
+  static MaterialColor colorCustom = MaterialColor(0xFF00005a, color);
 }

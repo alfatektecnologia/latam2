@@ -1,6 +1,7 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
 
 class Reserva extends StatefulWidget {
@@ -113,7 +114,13 @@ class _ReservaState extends State<Reserva> {
                         mode: CupertinoDatePickerMode.time,
                         //backgroundColor: Colors.grey,
                         use24hFormat: true,
-                        initialDateTime: DateTime(2020, 3, 1, 12, 0, 0),
+                        initialDateTime: DateTime(
+                            Util.dataReserva.year,
+                            Util.dataReserva.month,
+                            Util.dataReserva.day,
+                            12,
+                            0,
+                            0),
                         onDateTimeChanged: (date) {
                           setState(() {
                             newFormatedDate =
@@ -134,25 +141,17 @@ class _ReservaState extends State<Reserva> {
     //data da reserva
 
     selectDate(BuildContext context) async {
-      var selectDate = await showDatePicker(
+      var selectDate = await showRoundedDatePicker(
+        textPositiveButton: "OK" ,
         context: context,
-        builder: (context, child) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 50),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  //height: 480,
-                  child: child,
-                )
-              ],
-            ),
-          );
-        },
         initialDate: DateTime.now(),
         firstDate: DateTime(2018),
         lastDate: DateTime(2030),
+        
+        theme: ThemeData(
+        
+            primarySwatch: Util.colorCustom, accentColor: Color(0xffed1650)),
+        
       );
 
       setState(() {
@@ -162,7 +161,7 @@ class _ReservaState extends State<Reserva> {
         // Util.dataInicioJornada = selectDate;
         _dataReserva = newFormatedDate;
         Util.dataReserva = selectDate;
-        Util.dataVooIdaDecolagem=Util.dataReserva;
+        Util.dataVooIdaDecolagem = Util.dataReserva;
         Util.hasDataInicio = true;
         Util.dataApresentacaoReserva = _dataReserva;
         print(newFormatedDate);
@@ -183,6 +182,7 @@ class _ReservaState extends State<Reserva> {
             RaisedButton(
                 //color: Color(0xff00005a),
                 onPressed: () {
+                  Util.hasTipoTripDefined = false;//reset
                   selectDate(context);
                 },
                 child: Text(
@@ -197,6 +197,8 @@ class _ReservaState extends State<Reserva> {
             RaisedButton(
                 //color: Color(0xff00005a),
                 onPressed: () {
+                  Util.hasTipoTripDefined = false;//reset
+
                   calendario(context);
                 },
                 child: Text(

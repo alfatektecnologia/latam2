@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latam/widgets/calcular_button.dart';
-import 'package:latam/widgets/data_inicio_jornada2.dart';
-import 'package:latam/widgets/hora_apresentacao2.dart';
+import 'package:latam/widgets/dates/data_inicio_jornada2.dart';
+import 'package:latam/widgets/times/hora_apresentacao2.dart';
 
 
 

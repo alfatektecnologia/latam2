@@ -39,9 +39,12 @@ class _TipoTripulacaoState extends State<TipoTripulacao> {
                 onChanged: (newValue) {
                   setState(() {
                     _radioValue1 = newValue;
-                    Util.resetarVariaveis();
+                    // Util.resetarVariaveis();
                     util.setTipoTripulacao('Simples');
                     Util.tripulacao = ("SIMPLES");
+                    Util.resetarDataHora();
+                    Util.hasFuncao = false;
+                    Util.hasFuso = false;
                     Util.hasVooVolta = false; //sera?
                     Util.hasTipoTripDefined = true;
                   });
@@ -64,9 +67,11 @@ class _TipoTripulacaoState extends State<TipoTripulacao> {
                 onChanged: (newValue) {
                   setState(() {
                     _radioValue1 = newValue;
-                    Util.resetarVariaveis();
+                    // Util.resetarVariaveis();
                     util.setTipoTripulacao('Composta');
                     Util.tripulacao = ("COMPOSTA");
+                    Util.hasEtapa = false;
+                    Util.resetarDataHora();
                     Util.hasTipoTripDefined = true;
                   });
 
@@ -79,29 +84,37 @@ class _TipoTripulacaoState extends State<TipoTripulacao> {
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              Radio(
-                value: 2,
-                groupValue: _radioValue1,
-                onChanged: (newValue) {
-                  setState(() {
-                    _radioValue1 = newValue;
-                    Util.resetarVariaveis();
-                    util.setTipoTripulacao('Revezamento');
-                    Util.hasTipoTripDefined = true;
-                    Util.tripulacao = ('REVEZAMENTO');
-                  });
 
-                  print(newValue);
-                },
-              ),
-              Text(
-                'Revezamento',
-                style: TextStyle(fontSize: 16.0, color: Color(0xff858585)),
-              ),
-            ],
-          ),
+          //if tipo voo equal domestic do not show
+          Util.destino == ('DOM')
+              ? Container()
+              : Row(
+                  children: <Widget>[
+                    Radio(
+                      value: 2,
+                      groupValue: _radioValue1,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _radioValue1 = newValue;
+                          // Util.resetarVariaveis();
+                          util.setTipoTripulacao('Revezamento');
+                          Util.resetarDataHora();
+
+                          Util.hasTipoTripDefined = true;
+                          Util.hasEtapa = false;
+                          Util.tripulacao = ('REVEZAMENTO');
+                        });
+
+                        print(newValue);
+                      },
+                    ),
+                    Text(
+                      'Revezamento',
+                      style:
+                          TextStyle(fontSize: 16.0, color: Color(0xff858585)),
+                    ),
+                  ],
+                ),
           /* Divider(
             height: 5,
             color: Color(0xff858585),

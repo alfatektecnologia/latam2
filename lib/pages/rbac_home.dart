@@ -9,6 +9,7 @@ import 'package:latam/widgets/rota_help.dart';
 import 'package:latam/widgets/rota_safety_case.dart';
 import 'package:latam/widgets/sobre_aviso.dart';
 import 'package:latam/widgets/sobre_aviso_form.dart';
+import 'package:latam/widgets/tipo_voo.dart';
 import 'package:latam/widgets/tripulacao.dart';
 import 'package:latam/widgets/warning.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +33,10 @@ class _RbacHomeState extends State<RbacHome> {
   String _currentEquipamento = 'Selecione    ';
   String _currentRota = "Selecione";
   bool _sobreaviso = false;
-  bool showRotaSafetyCase = false;
+  
   bool showTripEscolha = false;
   bool showWarning = false;
+  
 
   List<Jornada> myList = List();
 
@@ -42,8 +44,8 @@ class _RbacHomeState extends State<RbacHome> {
   void initState() {
     super.initState();
     setState(() {
-      Util.resetarVariaveis();
-      showRotaSafetyCase = false;
+      // Util.resetarVariaveis();
+      Util.showRotaSafetyCase = false;
       _sobreaviso = false;
       showTripEscolha = false;
       showWarning = false;
@@ -76,7 +78,7 @@ class _RbacHomeState extends State<RbacHome> {
         Util.showLastro = true;
         Util.tripTTonly = false;
         Util.is767FSafety = false;
-        showRotaSafetyCase = false;
+        Util.showRotaSafetyCase = false;
         Util.no767FSafety = false;
         Util.hasVooVolta = false;
         _sobreaviso = true; //mostra a pergunta sobre sobreaviso
@@ -87,7 +89,7 @@ class _RbacHomeState extends State<RbacHome> {
         _sobreaviso = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         showTripEscolha = true;
-        showRotaSafetyCase = false;
+        Util.showRotaSafetyCase = false;
         Util.showLastro = true;
         showWarning = false;
         Util.tripTTonly = true;
@@ -98,7 +100,7 @@ class _RbacHomeState extends State<RbacHome> {
         _currentRota == 'Safety case') {
       //mostrar rota
       setState(() {
-        showRotaSafetyCase = false;
+        Util.showRotaSafetyCase = false;
         _sobreaviso = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         showTripEscolha = false;
@@ -113,7 +115,7 @@ class _RbacHomeState extends State<RbacHome> {
         _currentEquipamento != 'Selecione    ' &&
         _currentRota == 'Safety case') {
       setState(() {
-        showRotaSafetyCase = true;
+        Util.showRotaSafetyCase = true;
         Util.showLastro = false;
         _sobreaviso = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
@@ -127,7 +129,7 @@ class _RbacHomeState extends State<RbacHome> {
     } else if (_currentEquipamento == 'Selecione    ' ||
         _currentRota == 'Selecione') {
       setState(() {
-        showRotaSafetyCase = false;
+        Util.showRotaSafetyCase = false;
         _sobreaviso = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         Util.tripTTonly = false;
@@ -141,22 +143,30 @@ class _RbacHomeState extends State<RbacHome> {
         Util.hasVooVolta = false;
       });
     }
-    /* else if (!(_currentEquipamento != 'B767F' &&
-            _currentRota == 'Safety case') &&
-        _currentEquipamento != 'B767F') {
-      _sobreaviso = true;
-    } */
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Calcular Jornada',
         ),
-        backgroundColor: Color(0xff00005a),
+        actions: <Widget>[
+          IconButton(
+              icon: const Icon(
+                Icons.backspace,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                setState(() {
+                  Util.gotoScreen(RbacHome(), context);//reinicia a propria pagina
+                  Util.resetarDataHora();
+                  Util.resetarVariaveis();//reseta as variaveis ao estado inicial
+                });
+              })
+        ],
+        backgroundColor: const Color(0xff00005a),
         centerTitle: true,
       ),
       drawer: MenuBar(
@@ -174,7 +184,6 @@ class _RbacHomeState extends State<RbacHome> {
                   builder: (context, util, _) => Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-//TesteCard(),
                       Card(
                         elevation: 3,
                         child: Padding(
@@ -182,26 +191,26 @@ class _RbacHomeState extends State<RbacHome> {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                Text(
+                                const Text(
                                   "Equipamento:",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     color: Color(0xffed1650),
                                   ),
                                 ),
                                 DropdownButton<String>(
-                                  items: _equipamentos
-                                      .map((String dropDownStringItem) {
+                                  items:
+                                      _equipamentos.map((String dropDownStringItem) {
                                     return DropdownMenuItem<String>(
                                         value: dropDownStringItem,
                                         child: Text(
                                           dropDownStringItem,
-                                          style: TextStyle(
-                                              color: Color(0xff858585),
+                                          style: const TextStyle(
+                                              color: const Color(0xff858585),
                                               fontSize: 20),
                                         ));
                                   }).toList(),
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.airplanemode_active,
                                     size: 30,
                                   ),
@@ -256,13 +265,12 @@ class _RbacHomeState extends State<RbacHome> {
                                     ),
                                   ),
                                   DropdownButton<String>(
-                                    items:
-                                        _rota.map((String dropDownStringItem) {
+                                    items: _rota.map((String dropDownStringItem) {
                                       return DropdownMenuItem<String>(
                                           value: dropDownStringItem,
                                           child: Text(
                                             dropDownStringItem,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 color: Color(0xff858585),
                                                 fontSize: 20),
                                           ));
@@ -288,15 +296,15 @@ class _RbacHomeState extends State<RbacHome> {
                         ),
                       ),
                       showWarning ? WarningSafetyCase() : Container(),
-//Relogio(),
+
                       _sobreaviso ? SobreAviso() : Container(),
                       //de acordo com a seleção anterior, mostra sobreaviso form
                       //util.isSobreAviso ? SobreAvisoForm() : Container(),
                       Util.isSobreAviso ? SobreAvisoForm() : Container(),
                       //mostrar rota safetyCase?
-                      showRotaSafetyCase ? RotaSafetyCase() : Container(),
+                      Util.showRotaSafetyCase ? RotaSafetyCase() : Container(),
                       Util.no767FSafety ? No767FSafetyCase() : Container(),
-
+                      showTripEscolha ? TipoVoo() : Container(),
                       showTripEscolha ? TipoTripulacao() : Container(),
 
                       Util.hasTipoTripDefined

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
-import 'package:latam/widgets/inicio_sobreaviso2.dart';
+import 'package:latam/widgets/times/inicio_sobreaviso2.dart';
 import 'package:latam/widgets/reserva_form.dart';
-import 'package:latam/widgets/termino_sobreaviso2.dart';
+
+import 'package:latam/widgets/times/termino_sobreaviso2.dart';
 import 'package:provider/provider.dart';
 
 class SobreAvisoForm extends StatefulWidget {

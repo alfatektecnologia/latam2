@@ -34,7 +34,7 @@ class _LoginState extends State<Login> {
   //Util util;
 
   String messageError;
-  List<Acesso> acesso = List();
+  // List<Acesso> acesso = List();
   var result;
   var listener;
   final _formKey =
@@ -46,26 +46,30 @@ class _LoginState extends State<Login> {
     final form = _formKey.currentState;
     if (form.validate()) {
       print('Data is valid');
-
-      //checar se email esta na lista de liberados
-
-      Util.getAcessoByEmail(_emailController.text).then((value) {
-        if (value.length == 0) {
-          print('Não liberado');
-          showMessage('Acesso não liberado!');
-        } else {
-          showMessage('Acesso liberado!');
-          print('Liberado');
-          hasUser == true
-              ? signIn(_emailController.text, _senhaController.text)
-              : createUser(_emailController.text, _senhaController.text);
-        }
-      }).catchError((e) {
-        showMessage('Acesso não liberado!');
-      });
+      checarUserByEmail();
     } else {
       hadErrorOnValidate = true;
     }
+  }
+
+  void checarUserByEmail()async {
+    await Util.getAcessoByEmail(_emailController.text).then((value) {
+      if (value.length == 0) {
+        print('Não liberado');
+        showMessage('Acesso não liberado!');
+        hadErrorOnValidate = true;
+       // exit(1);
+      } else {
+        showMessage('Acesso liberado!');
+        print('Liberado');
+        hasUser == true
+            ? signIn(_emailController.text, _senhaController.text)
+            : createUser(_emailController.text, _senhaController.text);
+      }
+    }).catchError((e) {
+      showMessage('Acesso não liberado!');
+      hadErrorOnValidate = true;
+    });
   }
 
   //Show a message using a SnackBar
@@ -113,35 +117,38 @@ class _LoginState extends State<Login> {
   //Creating new general user
   Future createUser(String email, String senha) async {
     validateDataAndSave();
+    if (!hadErrorOnValidate) {
+      await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: senha)
+          .then((value) {
+        messageError = 'Criado e Autenticado com sucesso';
+        //show snackbar
+        showMessage(messageError);
 
-    await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: senha)
-        .then((value) {
-      messageError = 'Criado e Autenticado com sucesso';
-      //show snackbar
-      showMessage(messageError);
+        gotoPagina(context, Alerta()); //mostrar aviso=>rbac page
+      }).catchError((e) {
+        PlatformException erro = e;
 
-      gotoPagina(context, Alerta()); //mostrar aviso=>rbac page
-    }).catchError((e) {
-      PlatformException erro = e;
+        if (erro.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+          /*estou considerando que a senha nunca poderá estar errada, pois ainda não foi cadastrada */
+          messageError = 'Erro no cadastramento. E-mail já cadastrado em ' +
+              Util.qdadeCadastros.toString() +
+              ' dispositivo(s)!';
 
-      if (erro.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-        /*estou considerando que a senha nunca poderá estar errada, pois ainda não foi cadastrada */
-        messageError = 'Erro no cadastramento. E-mail já cadastrado em ' +
-            Util.qdadeCadastros.toString() +
-            ' dispositivo(s)!';
+          // Util.showFlushbar(context, messageError);
 
-       // Util.showFlushbar(context, messageError);
-        
-        setState(() {
-          hasUser = true; //para mudar texto do botão
-          Util.qdadeCadastros = Util.qdadeCadastros + 1;
-        });
-        signIn(email, senha);
+          setState(() {
+            hasUser = true; //para mudar texto do botão
+            Util.qdadeCadastros = Util.qdadeCadastros + 1;
+          });
+          signIn(email, senha);
 
-        print('Falha na criação' + e.toString());
-      }
-    });
+          print('Falha na criação' + e.toString());
+        }
+      });
+    } else {
+      showMessage('Acesso não liberado!');
+    }
   }
 
   //send email if user has forgotten password
@@ -196,7 +203,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       key: scaffoldKey,
       //backgroundColor: Color(0xffed1650),//deepPurple[200],

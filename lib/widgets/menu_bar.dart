@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:latam/pages/checa_user.dart';
+import 'package:latam/pages/emails_liberados.dart';
 import 'package:latam/pages/pdf_home.dart';
 import 'package:latam/pages/rbac_home.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
 import 'package:flutter/material.dart';
 
-import 'checa_user.dart';
+
 
 final util = Util();
 
@@ -86,14 +88,17 @@ class MenuBar extends StatelessWidget {
               Util.gotoScreen(ChecaUser(), context);
             },
           ):Container(),
-          /*  ListTile(
-            leading: Icon(Icons.local_offer),
-            title: Text("Promoções"),
+          Util.userEmail=='emanoel_oliveira@hotmail.com'
+          ? 
+           ListTile(
+            leading: Icon(Icons.contacts,size: 50,color: Color(0xffed1650),),
+            title: Text("Liberados",style: TextStyle(fontSize: 20,color: Color(0xff858585))),
             onTap: () {
               Navigator.of(context).pop();
-              Util.gotoScreen(Promotion(), context);
+              Util.gotoScreen(EmailsLiberados(), context);
             },
-          ), */
+          )
+          :Container(),
           ListTile(
             leading: Image.asset('assets/images/exit.png',height:40),
             title: Text(

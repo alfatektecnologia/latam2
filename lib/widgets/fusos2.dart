@@ -41,7 +41,7 @@ class _Fusos2State extends State<Fusos2> {
                   onChanged: (String newSelectedEtapa) {
                     setState(() {
                       _currentFuso = newSelectedEtapa;
-
+                      //Util.resetarDataHora();
                       print('Equipamento: ' + Util.equipamento);
                       print('Tipo Voo: ' + Util.tipoVoo);
                       print('Tipo tripulação: ' + Util.tipoTripulacao);

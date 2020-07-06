@@ -1,17 +1,21 @@
 import 'package:intl/intl.dart';
 import 'dart:math';
 
+import 'package:latam/utilitarios/utilitarios.dart';
+
 class Resultado {
   double jornada;
   String voo;
   String horarioLimiteCorteMotor;
   String horarioLimiteTerminoJornada;
   String lastro;
+  bool lastroNegativo;
   double jornada2;
   String voo2;
   String horarioLimiteCorteMotor2;
   String horarioLimiteTerminoJornada2;
   String lastro2;
+  bool lastro2Negativo;
   String aclimatacao;
   String jornadaFormatada() {
     if (jornada == -1) {
@@ -83,6 +87,8 @@ class Calculo {
     Resultado res;
     Resultado res2;
 
+    bool faltaDados = false;
+
     if (((dataVooIdaDecolagem == null || dataVooIdaPouso == null) &&
             safetyCase == '0') ||
         ((dataVooIdaDecolagem == null || dataVooIdaPouso == null) &&
@@ -91,6 +97,21 @@ class Calculo {
         (dataVooIdaDecolagem == null &&
             safetyCase == '1' &&
             equipamento != 'B767F')) {
+              faltaDados = true;
+    }
+/*
+    if(horaVooIdaDecolagem == null || horaVooIdaPouso == null){
+      faltaDados = true;
+    }
+
+    if(dataVooVoltaDecolagem!=null && horaVooVoltaDecolagem==null){
+      faltaDados = true;
+    }
+    if(dataVooVoltaPouso!=null && horaVooVoltaPouso==null){
+      faltaDados = true;
+    }
+*/
+    if(faltaDados){
       res = new Resultado(jornada: -1, voo: 'Preencha os campos');
       res.horarioLimiteCorteMotor = 'Preencha os campos';
       res.horarioLimiteCorteMotor2 = 'Preencha os campos';
@@ -214,6 +235,7 @@ class Calculo {
       }
 
       Duration tempoSobreAviso;
+      int sobreavisoQueSupera8Horas = 0;
       if (horarioInicioSobreaviso != null && horarioTerminoSobreaviso != null) {
         if (horarioInicioSobreaviso.compareTo(horarioTerminoSobreaviso) > 0) {
           horarioTerminoSobreaviso =
@@ -235,16 +257,12 @@ class Calculo {
             res.jornada = 16; //calcular o tempo de sobre aviso, fazer 16- isso
           } else {
             //tripulacao composta ou revezamento
-            int sobreavisoQueSupera8Horas =
-                tempoSobreAviso.inMinutes - (8 * 60);
-            if (sobreavisoQueSupera8Horas > 0) {
-              //print('jornada antes: ' + res.jornada.toString());
-              res.jornada = ((res.jornada * 60) - sobreavisoQueSupera8Horas) /
-                  60; //verificar
-              //print('tempo sobreaviso: ' + tempoSobreAviso.inMinutes.toString());
-              //print('mais que 8: ' + sobreavisoQueSupera8Horas.toString());
-              //print('jornada: ' + res.jornada.toString());
-            }
+            sobreavisoQueSupera8Horas = tempoSobreAviso.inMinutes - (8 * 60);
+            //if (sobreavisoQueSupera8Horas > 0) {
+
+            //res.jornada = ((res.jornada * 60) - sobreavisoQueSupera8Horas) /
+            //  60; //verificar
+            //}
           }
         }
       }
@@ -257,19 +275,29 @@ class Calculo {
             new Duration(minutes: (res.jornada * 60).toInt()) -
                 tempoSobreAviso);
       }
-
-
-      /* Duration timeBetweenPousoELimite =
-          (((horarioLimiteJornada.difference(dataVooIdaPouso))*10));
-
-      int lastroEmMinutos =
-          (((timeBetweenPousoELimite.inMinutes)+5)~/10) - (destino == 'DOM' ? 30 : 45); */
+      if (sobreavisoQueSupera8Horas > 0) {
+        horarioLimiteJornada = dataVooIdaDecolagem.add(
+            new Duration(minutes: (res.jornada * 60).toInt()) -
+                Duration(minutes: sobreavisoQueSupera8Horas));
+      }
 
       Duration timeBetweenPousoELimite =
-          horarioLimiteJornada.difference(dataVooIdaPouso);
+          horarioLimiteJornada.add(new Duration(minutes: destino == 'DOM' ? -30 : -45)).difference(dataVooIdaPouso);
+      
+      
+      int lastroNegativo = 0;
+      int lastroEmMinutos = 0;
 
-      int lastroEmMinutos =
-          timeBetweenPousoELimite.inMinutes - (destino == 'DOM' ? 30 : 45);
+      if (timeBetweenPousoELimite.inMicroseconds < 0) {
+        lastroNegativo = 1;
+        timeBetweenPousoELimite = timeBetweenPousoELimite * -1;
+
+        lastroEmMinutos =
+            timeBetweenPousoELimite.inMinutes;// + (destino == 'DOM' ? 30 : 45);
+      } else {
+        lastroEmMinutos =
+            timeBetweenPousoELimite.inMinutes; //- (destino == 'DOM' ? 30 : 45);
+      }
 
       DateTime lastroTemp = new DateTime(DateTime.now().year, 1, 1, 0, 0, 0, 0);
       lastroTemp = lastroTemp.add(new Duration(minutes: lastroEmMinutos));
@@ -280,6 +308,11 @@ class Calculo {
           horarioLimiteJornada
               .add(new Duration(minutes: destino == 'DOM' ? -30 : -45)));
       res.lastro = DateFormat('HH:mm').format(lastroTemp);
+      if (lastroNegativo == 1) {
+        res.lastro = '-' + DateFormat('HH:mm').format(lastroTemp);
+      Util.lastroNegativo=true;
+      }else {Util.lastroNegativo=false;}
+      res.lastroNegativo = lastroNegativo == 1;
 
       if (tripulacao == 'SIMPLES' || fusos == 'MENOS') {
         res.horarioLimiteTerminoJornada2 = '00:00';
@@ -302,6 +335,7 @@ class Calculo {
             if (dataVooVoltaDecolagem.difference(dataVooIdaDecolagem).inHours >
                 36) {
               res.aclimatacao = 'Estado desconhecido de aclimatação';
+              res2.jornada = res2.jornada - 1;
               res.jornada2 = res.jornada2 - 1;
             } else {
               res.aclimatacao = 'Aclimatado';
@@ -314,10 +348,19 @@ class Calculo {
               .add(new Duration(minutes: res2.jornada.toInt() * 60));
 
           Duration timeBetweenPousoELimite2 =
-              horarioLimiteJornada2.difference(dataVooVoltaPouso);
+              horarioLimiteJornada2.add(new Duration(minutes: destino == 'DOM' ? -30 : -45)).difference(dataVooVoltaPouso);
 
-          int lastroEmMinutos2 =
-              timeBetweenPousoELimite2.inMinutes + (destino == 'DOM' ? 30 : 45);
+          int lastroNegativo2 = 0;
+          int lastroEmMinutos2 = 0;
+
+          if (timeBetweenPousoELimite2.inMicroseconds < 0) {
+            lastroNegativo2 = 1;
+            timeBetweenPousoELimite2 = timeBetweenPousoELimite2 * -1;
+
+            lastroEmMinutos2 = timeBetweenPousoELimite2.inMinutes;// + (destino == 'DOM' ? 30 : 45);
+          } else {
+            lastroEmMinutos2 = timeBetweenPousoELimite2.inMinutes;// - (destino == 'DOM' ? 30 : 45);
+          }
 
           DateTime lastroTemp2 =
               new DateTime(DateTime.now().year, 1, 1, 0, 0, 0, 0);
@@ -328,8 +371,13 @@ class Calculo {
               DateFormat('HH:mm').format(horarioLimiteJornada2);
           res.horarioLimiteCorteMotor2 = DateFormat('HH:mm').format(
               horarioLimiteJornada2
-                  .add(new Duration(minutes: destino == 'DOM' ? 30 : 45)));
+                  .add(new Duration(minutes: destino == 'DOM' ? -30 : -45)));
           res.lastro2 = DateFormat('HH:mm').format(lastroTemp2);
+          if (lastroNegativo2 == 1) {
+            res.lastro2 = '-' + DateFormat('HH:mm').format(lastroTemp2);
+          Util.lastro2Negativo=true;	
+          }else {Util.lastro2Negativo=false;}
+          res.lastro2Negativo = lastroNegativo2 == 1;
         }
       }
 

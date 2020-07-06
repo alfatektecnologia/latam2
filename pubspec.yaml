@@ -30,9 +30,10 @@ dependencies:
   flushbar: ^1.9.1
   flutter_plugin_pdf_viewer: ^1.0.7
   date_format: ^1.0.8
-  
+  flutter_rounded_date_picker: 1.0.4
   path_provider: ^1.6.5
   flutter_cupertino_date_picker: ^1.0.12
+  http: ^0.12.1
 
   intl: ^0.16.0
   

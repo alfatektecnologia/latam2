@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
-import 'package:provider/provider.dart';
+
 
 class Etapas extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class _EtapasState extends State<Etapas> {
   String _currentEtapa = 'Selecione';
   @override
   Widget build(BuildContext context) {
-    Util util = Provider.of<Util>(context);
+    //Util util = Provider.of<Util>(context);
     return Card(
       elevation: 3,
       child: Padding(
@@ -42,6 +42,7 @@ class _EtapasState extends State<Etapas> {
                   onChanged: (String newSelectedEtapa) {
 
                     setState(() {
+                      //Util.resetarDataHora();
                       _currentEtapa = newSelectedEtapa;
                       Util.hasEtapa = true;
                       _currentEtapa != 'Selecione'

@@ -8,10 +8,6 @@ class SobreAviso extends StatefulWidget {
 }
 
 class _SobreAvisoState extends State<SobreAviso> {
-
-
- 
-
   @override
   Widget build(BuildContext context) {
     Util util = Provider.of<Util>(context);
@@ -34,56 +30,64 @@ class _SobreAvisoState extends State<SobreAviso> {
             SizedBox(
               height: 8,
             ),
-            Row(mainAxisAlignment:MainAxisAlignment.spaceEvenly ,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Row(
-                  //mainAxisAlignment: MainAxisAlignment.center, 
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Radio(
+                        value: 0,
+                        groupValue: Util.radioValueSobreAviso,
+                        onChanged: (newValue) {
+                          setState(() {
+                            Util.tipoAcionamentoSobreaviso =
+                                ''; //reseto qualquer informação  de acionamento anterior
+                            Util.radioValueSobreAviso = newValue;
+                            // Util.resetarDataHora();
+                            util.setSobreaviso(true);
+                            Util.sobreaviso = '1';
+                            Util.hasSobreAviso = true;
+                          });
+
+                          print(newValue);
+                        },
+                      ),
+                      Text(
+                        'Sim',
+                        style:
+                            TextStyle(fontSize: 16.0, color: Color(0xff858585)),
+                      ),
+                    ]),
+                Row(
                   children: <Widget>[
-              Radio(
-                value: 0,
-                groupValue: Util.radioValueSobreAviso,
-                onChanged: (newValue) {
-                  setState(() {
-                    Util.tipoAcionamentoSobreaviso = '';//reseto qualquer informação  de acionamento anterior
-                    Util.radioValueSobreAviso = newValue;
-                    util.setSobreaviso(true);
-                    Util.sobreaviso = '1';
-                  });
+                    Radio(
+                      value: 1,
+                      groupValue: Util.radioValueSobreAviso,
+                      onChanged: (newValue) {
+                        setState(() {
+                          Util.radioValueSobreAviso = newValue;
+                          util.setSobreaviso(false);
+                          Util.sobreaviso = '0';
+                          Util.hasSobreAviso = true;
+                          // Util.resetarDataHora();
+                        });
 
-                  print(newValue);
-                },
-              ),
-              Text(
-                'Sim',
-                style: TextStyle(fontSize: 16.0, color: Color(0xff858585)),
-              ),
-              
-              
-            ]),
-            
-            
-            Row(
-            children: <Widget>[
-              Radio(
-                value: 1,
-                groupValue: Util.radioValueSobreAviso,
-                onChanged: (newValue) {
-                  setState(() {
-                    Util.radioValueSobreAviso = newValue;
-                    util.setSobreaviso(false);
-                    Util.sobreaviso = '0';
-                  });
-
-                  print(newValue);
-                },
-              ),
-              Text(
-                'Não',
-                style: TextStyle(fontSize: 16.0, color: Color(0xff858585)),
-              ),
-            ],
-            ),
+                        print(newValue);
+                      },
+                    ),
+                    Text(
+                      'Não',
+                      style:
+                          TextStyle(fontSize: 16.0, color: Color(0xff858585)),
+                    ),
+                  ],
+                ),
               ],
             ),
-        ]
-          ),),),);}}      
+          ]),
+        ),
+      ),
+    );
+  }
+}

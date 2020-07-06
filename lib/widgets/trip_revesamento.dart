@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
 import 'package:latam/widgets/calcular_button.dart';
-import 'package:latam/widgets/data_inicio_jornada2.dart';
-import 'package:latam/widgets/data_inicio_jornada4.dart';
-import 'package:latam/widgets/data_pouso3.dart';
+import 'package:latam/widgets/dates/data_inicio_jornada2.dart';
+import 'package:latam/widgets/dates/data_inicio_jornada4.dart';
+import 'package:latam/widgets/dates/data_pouso3.dart';
 import 'package:latam/widgets/fusos.dart';
-import 'package:latam/widgets/hora_apresentacao2.dart';
-import 'package:latam/widgets/hora_apresentacao3.dart';
-import 'package:latam/widgets/hora_apresentacao4.dart';
-import 'package:latam/widgets/hora_last_pouso2.dart';
-import 'package:latam/widgets/hora_lastpouso3.dart';
+import 'package:latam/widgets/times/hora_apresentacao2.dart';
+import 'package:latam/widgets/times/hora_apresentacao3.dart';
+import 'package:latam/widgets/times/hora_apresentacao4.dart';
+import 'package:latam/widgets/times/hora_last_pouso2.dart';
+import 'package:latam/widgets/times/hora_lastpouso3.dart';
 import 'package:latam/widgets/tipo_funcao.dart';
-import 'package:provider/provider.dart';
 
-import 'data_inicio_jornada3.dart';
-import 'data_pouso2.dart';
+import 'dates/data_inicio_jornada3.dart';
+import 'dates/data_pouso2.dart';
 import 'fusos2.dart';
 
 class TripulacaoRevezamento extends StatefulWidget {
@@ -23,18 +22,20 @@ class TripulacaoRevezamento extends StatefulWidget {
 }
 
 class _TripulacaoRevezamentoState extends State<TripulacaoRevezamento> {
-  var _radioValue1 = -1;
   bool isReservaVoo = false;
 
   @override
   void initState() {
-    Util.resetarVariaveis();
+    // Util.resetarVariaveis();
+    Util.resetarDataHora();
+
+    Util.hasEtapa = false;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    Util util = Provider.of<Util>(context);
+    //Util util = Provider.of<Util>(context);
 
     setState(() {
       if (Util.tipoAcionamentoSobreaviso == 'Reserva + voo') {
@@ -51,7 +52,7 @@ class _TripulacaoRevezamentoState extends State<TripulacaoRevezamento> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Center(
+              /* Center(
                 child: Text(
                   'Voo',
                   style: TextStyle(
@@ -104,7 +105,7 @@ class _TripulacaoRevezamentoState extends State<TripulacaoRevezamento> {
                   ]),
               SizedBox(
                 height: 8,
-              ),
+              ), */
               /* Divider(
                 height: 5,
                 color: Color(0xff858585),

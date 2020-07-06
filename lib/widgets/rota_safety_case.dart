@@ -15,14 +15,13 @@ class _RotaSafetyCaseState extends State<RotaSafetyCase> {
 
     return Card(
       elevation: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(children: <Widget>[
-        
-        SizedBox(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(children: <Widget>[
+          SizedBox(
             height: 8,
-        ),
-        Center(
+          ),
+          Center(
             child: Text(
               'Rota Safety Case',
               style: TextStyle(
@@ -30,17 +29,19 @@ class _RotaSafetyCaseState extends State<RotaSafetyCase> {
                 color: Color(0xffed1650),
               ),
             ),
-        ),
-        SizedBox(
+          ),
+          SizedBox(
             height: 8,
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Radio(
               value: 0,
               groupValue: _radioValue1,
               onChanged: (newValue) {
                 setState(() {
                   _radioValue1 = newValue;
+                  Util.resetarDataHora();
+                  Util.tipoTripulacao=" ";//just in case previous selected
                   util.setRotaSafetyCase('GRU - MXP');
                   Util.rotaSafetyCase = '0';
                 });
@@ -58,8 +59,9 @@ class _RotaSafetyCaseState extends State<RotaSafetyCase> {
               onChanged: (newValue) {
                 setState(() {
                   _radioValue1 = newValue;
+                  Util.resetarDataHora();
                   util.setRotaSafetyCase('MXP - GRU');
-                   Util.rotaSafetyCase = '1';
+                  Util.rotaSafetyCase = '1';
                 });
 
                 print(newValue);
@@ -74,9 +76,9 @@ class _RotaSafetyCaseState extends State<RotaSafetyCase> {
               height: 5,
               color: Color(0xff858585),
             ),
+          ]),
         ]),
-      ]),
-          ),
+      ),
     );
   }
 }
