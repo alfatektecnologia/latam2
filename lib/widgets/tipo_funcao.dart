@@ -50,6 +50,7 @@ class _TipoFuncaoState extends State<TipoFuncao> {
                     setState(() {
                       _currentFuncao = newSelectedEtapa;
                      // Util.resetarDataHora();
+                      Util.hasFuncao = false;
 
                       if (newSelectedEtapa == 'Tripulante técnico') {
                         Util.funcao = 'TT';

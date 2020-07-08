@@ -54,7 +54,7 @@ class _FusosState extends State<Fusos> {
                   onChanged: (String newSelectedEtapa) {
                     setState(() {
                       _currentFuso = newSelectedEtapa;
-
+                      Util.hasFuso = false;
                       print('Equipamento: ' + Util.equipamento);
                       print('Tipo Voo: ' + Util.tipoVoo);
                       print('Tipo tripulação: ' + Util.tipoTripulacao);
