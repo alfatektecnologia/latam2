@@ -310,7 +310,7 @@ class Calculo {
       res.lastro = DateFormat('HH:mm').format(lastroTemp);
       if (lastroNegativo == 1) {
         res.lastro = '-' + DateFormat('HH:mm').format(lastroTemp);
-        Util.lastroNegativo=true;
+      Util.lastroNegativo=true;
       }else {Util.lastroNegativo=false;}
       res.lastroNegativo = lastroNegativo == 1;
 
@@ -375,7 +375,7 @@ class Calculo {
           res.lastro2 = DateFormat('HH:mm').format(lastroTemp2);
           if (lastroNegativo2 == 1) {
             res.lastro2 = '-' + DateFormat('HH:mm').format(lastroTemp2);
-            Util.lastro2Negativo=true;
+          Util.lastro2Negativo=true;
           }else {Util.lastro2Negativo=false;}
           res.lastro2Negativo = lastroNegativo2 == 1;
         }
@@ -630,7 +630,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 0 &&
         hora < 6) {
-      return new Resultado(jornada: 14, voo: '12:30' '');
+      return new Resultado(jornada: 13, voo: '11:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -638,7 +638,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 0 &&
         hora < 6) {
-      return new Resultado(jornada: 13, voo: '11:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -788,7 +788,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 0 &&
         hora < 6) {
-      return new Resultado(jornada: 14, voo: '11:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -1082,7 +1082,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 6 &&
         hora < 7) {
-      return new Resultado(jornada: 16, voo: '14:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -1090,7 +1090,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 6 &&
         hora < 7) {
-      return new Resultado(jornada: 14, voo: '12:30' '');
+      return new Resultado(jornada: 16, voo: '14:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -1240,7 +1240,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 6 &&
         hora < 7) {
-      return new Resultado(jornada: 16, voo: '12:30' '');
+      return new Resultado(jornada: 16, voo: '14:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -1534,7 +1534,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 7 &&
         hora < 8) {
-      return new Resultado(jornada: 17, voo: '15:30' '');
+      return new Resultado(jornada: 15, voo: '13:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -1542,7 +1542,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 7 &&
         hora < 8) {
-      return new Resultado(jornada: 15, voo: '13:30' '');
+      return new Resultado(jornada: 17, voo: '15:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -1692,7 +1692,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 7 &&
         hora < 8) {
-      return new Resultado(jornada: 17, voo: '13:30' '');
+      return new Resultado(jornada: 17, voo: '15:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -1986,7 +1986,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 8 &&
         hora < 12) {
-      return new Resultado(jornada: 17, voo: '15:30' '');
+      return new Resultado(jornada: 15, voo: '13:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -1994,7 +1994,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 8 &&
         hora < 12) {
-      return new Resultado(jornada: 15, voo: '13:30' '');
+      return new Resultado(jornada: 17, voo: '15:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -2144,7 +2144,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 8 &&
         hora < 12) {
-      return new Resultado(jornada: 17, voo: '13:30' '');
+      return new Resultado(jornada: 17, voo: '15:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -2438,7 +2438,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 12 &&
         hora < 14) {
-      return new Resultado(jornada: 17, voo: '15:30' '');
+      return new Resultado(jornada: 15, voo: '13:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -2446,7 +2446,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 12 &&
         hora < 14) {
-      return new Resultado(jornada: 15, voo: '13:30' '');
+      return new Resultado(jornada: 17, voo: '15:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -2596,7 +2596,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 12 &&
         hora < 14) {
-      return new Resultado(jornada: 17, voo: '13:30' '');
+      return new Resultado(jornada: 17, voo: '15:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -2890,7 +2890,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 14 &&
         hora < 16) {
-      return new Resultado(jornada: 16, voo: '14:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -2898,7 +2898,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 14 &&
         hora < 16) {
-      return new Resultado(jornada: 14, voo: '12:30' '');
+      return new Resultado(jornada: 16, voo: '14:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -3048,7 +3048,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 14 &&
         hora < 16) {
-      return new Resultado(jornada: 16, voo: '12:30' '');
+      return new Resultado(jornada: 16, voo: '14:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -3342,7 +3342,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 16 &&
         hora < 18) {
-      return new Resultado(jornada: 16, voo: '14:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -3350,7 +3350,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 16 &&
         hora < 18) {
-      return new Resultado(jornada: 14, voo: '12:30' '');
+      return new Resultado(jornada: 16, voo: '14:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -3500,7 +3500,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 16 &&
         hora < 18) {
-      return new Resultado(jornada: 16, voo: '12:30' '');
+      return new Resultado(jornada: 16, voo: '14:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&
@@ -3794,7 +3794,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 18 &&
         hora < 24) {
-      return new Resultado(jornada: 14, voo: '12:30' '');
+      return new Resultado(jornada: 13, voo: '11:30' '');
     } else if (equipamento == 'A32F' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -3802,7 +3802,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 18 &&
         hora < 24) {
-      return new Resultado(jornada: 13, voo: '11:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TC' &&
@@ -3952,7 +3952,7 @@ class Calculo {
         safetyCase == '0' &&
         hora >= 18 &&
         hora < 24) {
-      return new Resultado(jornada: 14, voo: '11:30' '');
+      return new Resultado(jornada: 14, voo: '12:30' '');
     } else if (equipamento == 'B767' &&
         tripulacao == 'REVEZAMENTO' &&
         funcao == 'TT' &&

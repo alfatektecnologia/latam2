@@ -17,21 +17,22 @@ class _TipoTripulacaoState extends State<TipoTripulacao> {
       elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(children: <Widget>[
-          Center(
-            child: Text(
-              'Tipo tripulação:',
-              style: TextStyle(
-                fontSize: 20,
-                color: Color(0xffed1650),
-              ),
+        child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+          
+          Text(
+            'Tipo tripulação:',
+            style: TextStyle(
+              fontSize: 20,
+              color: Color(0xffed1650),
             ),
           ),
           SizedBox(
             height: 16,
           ),
           Row(
-            //mainAxisAlignment: MainAxisAlignment.center,
+            //mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Radio(
                 value: 0,

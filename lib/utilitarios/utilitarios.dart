@@ -32,6 +32,7 @@ class Util with ChangeNotifier {
   static bool hasFuso = false;
   static bool hasFuncao = false;
   static bool hasSobreAviso = false;
+  static bool hasReserva=false;
 
   static bool isInputDataValidated = false;
 
@@ -44,6 +45,7 @@ class Util with ChangeNotifier {
   static String fusos = "";
   static String safetyCase = "";
   static String sobreaviso = "";
+  static String reserva = "";
   static String acionado = "";
   static String destino = "";
   static String rotaSafetyCase = "";
@@ -64,7 +66,9 @@ class Util with ChangeNotifier {
 
   static bool isSobreAviso =
       false; //true if resposta de sobreaviso for sim em SobreAviso.
+  static bool isReserva = false;
   static int radioValueSobreAviso = -1;
+  static int radioValueReserva = -1;
   static bool showLastro = true;
   static bool is767FSafety = false;
   static bool tripTTonly = false;
@@ -75,6 +79,7 @@ class Util with ChangeNotifier {
   static String dataApresentacaoReserva = 'DD/MM/AA';
   static bool no767FSafety = false;
   static String tipoAcionamentoSobreaviso;
+  static String tipoAcionamentoReserva;
   static bool hasTipoTripDefined =
       false; //true if type of tripulation is defined
   static String faixaHorariaJornada;
@@ -119,6 +124,8 @@ class Util with ChangeNotifier {
       hasHoraInicio2 = false;
       hasHoraPouso = false;
       hasHoraPouso2 = false;
+      hasFuncao = false;
+      hasFuso = false;
     } else {
       // hasDataInicio = false;
       hasDataInicio2 = false;
@@ -128,6 +135,8 @@ class Util with ChangeNotifier {
       hasHoraInicio2 = false;
       hasHoraPouso = false;
       hasHoraPouso2 = false;
+      hasFuncao = false;
+      hasFuso = false;
     }
   }
 
@@ -164,6 +173,12 @@ class Util with ChangeNotifier {
   //estado do sobreaviso (SobreAviso.dart e RbacHome.dart)
   setSobreaviso(bool x) {
     isSobreAviso = x;
+
+    notifyListeners();
+  }
+
+  setReserva(bool x) {
+    isReserva = x;
 
     notifyListeners();
   }
@@ -652,89 +667,90 @@ class Util with ChangeNotifier {
     switch (tipoTripulacao) {
       case 'Simples':
         if (!hasDataInicio) {
-          showFlushbar(context, 'Preencher a data de início da jornada!');
+          showFlushbar(context, 'Preencher a data de início da jornada.');
         } else if (!hasHoraInicio) {
-          showFlushbar(context, 'Preencher o horário de início da jornada!');
+          showFlushbar(context, 'Preencher o horário de apresentação.');
         } else if (!hasEtapa && !showRotaSafetyCase) {
-          showFlushbar(context, 'Escolher n° de etapas!');
+          showFlushbar(context, 'Escolher n° de etapas.');
         } else if (!hasDataPouso) {
-          showFlushbar(context, 'Preencher a data do pouso!');
+          showFlushbar(context, 'Preencher a data do pouso.');
         } else if (!hasHoraPouso) {
-          showFlushbar(context, 'Preencher o horário previsto do pouso!');
+          showFlushbar(context, 'Preencher o horário previsto do pouso.');
         } else {
           isInputDataValidated = true;
         }
 
         break;
       case 'Composta': //função??? apagar dados
-        if (!hasDataInicio) {
+        if (!hasFuso) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data de início da jornada!');
-        } else if (!hasHoraInicio) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Preencher o horário de início da jornada!');
-        } else if (!hasDataPouso) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data do pouso!');
-        } else if (!hasHoraPouso){
-          isInputDataValidated = false;
-          showFlushbar(context, 'Preencher o horário previsto do pouso!');
-        } else if (!hasFuso) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Escolher qdade de fusos!');
+          showFlushbar(context, 'Escolher nº de fusos.');
         } else if (!hasFuncao) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Escolher tipo de função!');
+          showFlushbar(context, 'Escolher tipo de função.');
+        } else if (!hasDataInicio) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher a data de início da jornada.');
+        } else if (!hasHoraInicio) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher o horário de apresentação.');
+        } else if (!hasDataPouso) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher a data do pouso.');
+        } else if (!hasHoraPouso) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher o horário previsto do pouso.');
         } else if (!hasDataInicio2 && hasVooVolta) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data de volta da jornada!');
+          showFlushbar(context, 'Preencher a data de volta da jornada.');
         } else if (!hasHoraInicio2 && hasVooVolta) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher o horário de volta da jornada!');
+          showFlushbar(
+              context, 'Preencher o horário de apresentação da volta.');
         } else if (!hasDataPouso2 && hasVooVolta) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data prevista do pouso de volta!');
+          showFlushbar(context, 'Preencher a data prevista do pouso de volta.');
         } else if (!hasHoraPouso2 && hasVooVolta) {
           isInputDataValidated = false;
           showFlushbar(
-              context, 'Preencher o horário previsto do pouso de volta!');
+              context, 'Preencher o horário previsto do pouso da volta.');
         } else {
           isInputDataValidated = true;
         }
 
         break;
       case 'Revezamento':
-        if (!hasDataInicio) {
+        if (!hasFuso) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data de início da jornada!');
-        } else if (!hasHoraInicio) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Preencher o horário de início da jornada!');
-        } else if (!hasDataPouso) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data prevista do pouso!');
-        } else if (!hasHoraPouso) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Preencher o horário previsto do pouso!');
-        } else if (!hasFuso) {
-          isInputDataValidated = false;
-          showFlushbar(context, 'Escolher qdade de fusos!');
+          showFlushbar(context, 'Escolher nº de fusos.');
         } else if (!hasFuncao) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Escolher tipo de função!');
+          showFlushbar(context, 'Escolher tipo de função.');
+        } else if (!hasDataInicio) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher a data de início da jornada.');
+        } else if (!hasHoraInicio) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher o horário de apresentação.');
+        } else if (!hasDataPouso) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher a data prevista do pouso.');
+        } else if (!hasHoraPouso) {
+          isInputDataValidated = false;
+          showFlushbar(context, 'Preencher o horário previsto do pouso.');
         } else if (!hasDataInicio2 && hasVooVolta) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data de volta da jornada!');
+          showFlushbar(context, 'Preencher a data de volta da jornada.');
         } else if (!hasHoraInicio2 && hasVooVolta) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher o horário de volta da jornada!');
+          showFlushbar(context, 'Preencher o horário de volta da jornada.');
         } else if (!hasDataPouso2 && hasVooVolta) {
           isInputDataValidated = false;
-          showFlushbar(context, 'Preencher a data prevista do pouso de volta!');
+          showFlushbar(context, 'Preencher a data prevista do pouso da volta.');
         } else if (!hasHoraPouso2 && hasVooVolta) {
           isInputDataValidated = false;
           showFlushbar(
-              context, 'Preencher o horário previsto do pouso de volta!');
+              context, 'Preencher o horário previsto do pouso da volta.');
         } else {
           isInputDataValidated = true;
         }
@@ -742,12 +758,13 @@ class Util with ChangeNotifier {
         break;
       default:
         if (Util.showRotaSafetyCase) {
+          hasSobreAviso = true; //just to skip the if statement below
           if (!hasDataInicio) {
             isInputDataValidated = false;
-            showFlushbar(context, 'Preencher a data de início da jornada!');
+            showFlushbar(context, 'Preencher a data de início da jornada.');
           } else if (!hasHoraInicio) {
             isInputDataValidated = false;
-            showFlushbar(context, 'Preencher o horário de início da jornada!');
+            showFlushbar(context, 'Preencher o horário de apresentação.');
           } else {
             isInputDataValidated = true;
           }
@@ -758,17 +775,12 @@ class Util with ChangeNotifier {
     }
     if (hasSobreAviso) {
       //isInputDataValidated = true;
+    } else if (equipamento == 'B767F') {
+      //isInputDataValidated = true;
     } else {
       showFlushbar(context, 'Acionado no sobreaviso?');
       isInputDataValidated = false;
     }
-
-   /* if (hasFuncao) {//????
-      isInputDataValidated = true;
-    } else {
-      showFlushbar(context, 'Acionado em sobreaviso?');
-      isInputDataValidated = false;
-    }*/
   }
 
 //color custom

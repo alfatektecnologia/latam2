@@ -120,7 +120,7 @@ class _Resultado2State extends State<Resultado2> {
                 color: Colors.white,
               ),
               onPressed: () {
-                showAlertDialog1(context, "Resumo da jornada", Resumo());
+                showAlertDialog1(context, "Resumo", Resumo());
               })
         ],
         title: Text('Resultado'),

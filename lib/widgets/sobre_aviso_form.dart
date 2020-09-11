@@ -89,7 +89,7 @@ class _SobreAvisoFormState extends State<SobreAvisoForm> {
                 height: 8,
               ),
               Util.tipoAcionamentoSobreaviso == 'Reserva + voo'
-                  ? Reserva()
+                  ? ReservaForm()
                   : Container(),
               
             ]),

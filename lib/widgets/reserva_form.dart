@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
 
-class Reserva extends StatefulWidget {
+class ReservaForm extends StatefulWidget {
   @override
-  _ReservaState createState() => _ReservaState();
+  _ReservaFormState createState() => _ReservaFormState();
 }
 
-class _ReservaState extends State<Reserva> {
+class _ReservaFormState extends State<ReservaForm> {
   String _dataReserva = 'DD/MM/AA';
   String _horaReserva = 'HH:MM';
   String newFormatedDate;

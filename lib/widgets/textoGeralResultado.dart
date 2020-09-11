@@ -9,7 +9,7 @@ class TextoGeralResultado extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              child: Text('As informações acima levam em consideração os dados preenchidos na tela anterior e o RBAC 117.',
+              child: Text('Os dados obtidos nesta tela são resultados das informações inseridas por você na tela anterior, cruzadas com o RBAC 117.',
               textAlign:TextAlign.justify,
               style: TextStyle(color: Color(0xffffffff),fontSize: 18),)
         

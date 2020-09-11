@@ -41,7 +41,8 @@ class _RotaSafetyCaseState extends State<RotaSafetyCase> {
                 setState(() {
                   _radioValue1 = newValue;
                   Util.resetarDataHora();
-                  Util.tipoTripulacao=" ";//just in case previous selected
+                  
+                  Util.tipoTripulacao = " "; //just in case previous selected
                   util.setRotaSafetyCase('GRU - MXP');
                   Util.rotaSafetyCase = '0';
                 });
@@ -60,6 +61,8 @@ class _RotaSafetyCaseState extends State<RotaSafetyCase> {
                 setState(() {
                   _radioValue1 = newValue;
                   Util.resetarDataHora();
+                  
+                   Util.tipoTripulacao = " "; //just in case previous selected
                   util.setRotaSafetyCase('MXP - GRU');
                   Util.rotaSafetyCase = '1';
                 });

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:latam/models/jornada.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
+import 'package:latam/widgets/acionado_reserva.dart';
 import 'package:latam/widgets/background_widget.dart';
 import 'package:latam/widgets/escolhe_tipo_trip.dart';
 import 'package:latam/widgets/menu_bar.dart';
+import 'package:latam/widgets/new_sobre_aviso_form.dart';
 import 'package:latam/widgets/no_767F_safety_case.dart';
 import 'package:latam/widgets/rota_help.dart';
 import 'package:latam/widgets/rota_safety_case.dart';
 import 'package:latam/widgets/sobre_aviso.dart';
-import 'package:latam/widgets/sobre_aviso_form.dart';
 import 'package:latam/widgets/tipo_voo.dart';
 import 'package:latam/widgets/tripulacao.dart';
 import 'package:latam/widgets/warning.dart';
@@ -33,10 +34,10 @@ class _RbacHomeState extends State<RbacHome> {
   String _currentEquipamento = 'Selecione    ';
   String _currentRota = "Selecione";
   bool _sobreaviso = false;
-  
+  bool _reserva = false;
+
   bool showTripEscolha = false;
   bool showWarning = false;
-  
 
   List<Jornada> myList = List();
 
@@ -47,10 +48,13 @@ class _RbacHomeState extends State<RbacHome> {
       // Util.resetarVariaveis();
       Util.showRotaSafetyCase = false;
       _sobreaviso = false;
+      _reserva = false;
       showTripEscolha = false;
       showWarning = false;
       util.setSobreaviso(false);
+      util.setReserva(false);
       Util.radioValueSobreAviso = -1;
+      Util.radioValueReserva = -1;
       showTripEscolha = false;
       Util.hasTipoTripDefined = false;
       Util.no767FSafety = false;
@@ -71,9 +75,11 @@ class _RbacHomeState extends State<RbacHome> {
         _currentRota == 'Demais rotas') {
       setState(() {
         Util.radioValueSobreAviso = -1; //reseto o valor do radio
-
+        Util.radioValueReserva = -1;
+        Util.hasReserva = false;
         showWarning = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
+        Util.isReserva = false;
         showTripEscolha = true;
         Util.showLastro = true;
         Util.tripTTonly = false;
@@ -82,12 +88,17 @@ class _RbacHomeState extends State<RbacHome> {
         Util.no767FSafety = false;
         Util.hasVooVolta = false;
         _sobreaviso = true; //mostra a pergunta sobre sobreaviso
+        _reserva = true;
       });
     } else if (_currentEquipamento == 'B767F' &&
         _currentRota == 'Demais rotas') {
       setState(() {
-        _sobreaviso = false;
+        Util.radioValueSobreAviso = -1; //reseto o valor do radio
+        Util.radioValueReserva = -1;
+        _sobreaviso = true;
+        Util.hasReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
+        //Util.isReserva = false;
         showTripEscolha = true;
         Util.showRotaSafetyCase = false;
         Util.showLastro = true;
@@ -100,9 +111,14 @@ class _RbacHomeState extends State<RbacHome> {
         _currentRota == 'Safety case') {
       //mostrar rota
       setState(() {
+        Util.radioValueSobreAviso = -1; //reseto o valor do radio
+        Util.radioValueReserva = -1;
         Util.showRotaSafetyCase = false;
         _sobreaviso = false;
+        _reserva = false;
+        Util.hasReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
+        Util.isReserva = false;
         showTripEscolha = false;
         Util.is767FSafety = false;
         showWarning = true;
@@ -115,9 +131,14 @@ class _RbacHomeState extends State<RbacHome> {
         _currentEquipamento != 'Selecione    ' &&
         _currentRota == 'Safety case') {
       setState(() {
+        Util.radioValueSobreAviso = -1; //reseto o valor do radio
+        Util.radioValueReserva = -1;
+        _sobreaviso = true;
+        _reserva = true;
         Util.showRotaSafetyCase = true;
         Util.showLastro = false;
-        _sobreaviso = false;
+        Util.hasReserva = false;
+        Util.isReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         showTripEscolha = false;
         Util.is767FSafety = false;
@@ -129,13 +150,19 @@ class _RbacHomeState extends State<RbacHome> {
     } else if (_currentEquipamento == 'Selecione    ' ||
         _currentRota == 'Selecione') {
       setState(() {
+        Util.radioValueSobreAviso = -1; //reseto o valor do radio
+        Util.radioValueReserva = -1;
         Util.showRotaSafetyCase = false;
         _sobreaviso = false;
+        _reserva = false;
+        Util.hasReserva = false;
+        Util.isReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         Util.tripTTonly = false;
         showTripEscolha = false;
         showWarning = false;
         util.setSobreaviso(false);
+        util.setReserva(false);
         Util.is767FSafety = false;
         showTripEscolha = false;
         Util.hasTipoTripDefined = false;
@@ -159,11 +186,7 @@ class _RbacHomeState extends State<RbacHome> {
                 color: Colors.white,
               ),
               onPressed: () {
-                setState(() {
-                  Util.gotoScreen(RbacHome(), context);//reinicia a propria pagina
-                  Util.resetarDataHora();
-                  Util.resetarVariaveis();//reseta as variaveis ao estado inicial
-                });
+                resetPage(context);
               })
         ],
         backgroundColor: const Color(0xff00005a),
@@ -199,8 +222,8 @@ class _RbacHomeState extends State<RbacHome> {
                                   ),
                                 ),
                                 DropdownButton<String>(
-                                  items:
-                                      _equipamentos.map((String dropDownStringItem) {
+                                  items: _equipamentos
+                                      .map((String dropDownStringItem) {
                                     return DropdownMenuItem<String>(
                                         value: dropDownStringItem,
                                         child: Text(
@@ -214,11 +237,33 @@ class _RbacHomeState extends State<RbacHome> {
                                     Icons.airplanemode_active,
                                     size: 30,
                                   ),
+                                  onTap: () {
+                                      Util.showRotaSafetyCase = false;
+                                      _sobreaviso = false;
+                                      _reserva = false;
+                                      Util.isReserva = false;
+                                      Util.hasReserva = false;
+                                      Util.isSobreAviso =
+                                          false; //apaga o form de sobreaviso
+                                      Util.tripTTonly = false;
+                                      showTripEscolha = false;
+                                      showWarning = false;
+                                      util.setSobreaviso(false);
+                                      util.setReserva(false);
+                                      Util.is767FSafety = false;
+                                      showTripEscolha = false;
+                                      Util.hasTipoTripDefined = false;
+                                      Util.no767FSafety = false;
+                                      Util.hasVooVolta = false;
+                                      Util.resetarVariaveis();
+                                    },
                                   onChanged: (String newSelectedEquipamento) {
                                     setState(() {
                                       _currentEquipamento =
                                           newSelectedEquipamento;
                                       Util.equipamento = _currentEquipamento;
+                                      //Util.resetarVariaveis();
+                                      // resetPage(context);
                                       what2show(_currentEquipamento,
                                           _currentRota, context);
                                       print(Util.isSobreAviso);
@@ -265,7 +310,8 @@ class _RbacHomeState extends State<RbacHome> {
                                     ),
                                   ),
                                   DropdownButton<String>(
-                                    items: _rota.map((String dropDownStringItem) {
+                                    items:
+                                        _rota.map((String dropDownStringItem) {
                                       return DropdownMenuItem<String>(
                                           value: dropDownStringItem,
                                           child: Text(
@@ -275,6 +321,26 @@ class _RbacHomeState extends State<RbacHome> {
                                                 fontSize: 20),
                                           ));
                                     }).toList(),
+                                    onTap: () {
+                                      Util.showRotaSafetyCase = false;
+                                      _sobreaviso = false;
+                                      _reserva = false;
+                                      Util.isReserva = false;
+                                      Util.hasReserva = false;
+                                      Util.isSobreAviso =
+                                          false; //apaga o form de sobreaviso
+                                      Util.tripTTonly = false;
+                                      showTripEscolha = false;
+                                      showWarning = false;
+                                      util.setSobreaviso(false);
+                                      util.setReserva(false);
+                                      Util.is767FSafety = false;
+                                      showTripEscolha = false;
+                                      Util.hasTipoTripDefined = false;
+                                      Util.no767FSafety = false;
+                                      Util.hasVooVolta = false;
+                                      Util.resetarVariaveis();
+                                    },
                                     onChanged: (String newSelectedRota) {
                                       setState(() {
                                         _currentRota = newSelectedRota;
@@ -300,7 +366,9 @@ class _RbacHomeState extends State<RbacHome> {
                       _sobreaviso ? SobreAviso() : Container(),
                       //de acordo com a seleção anterior, mostra sobreaviso form
                       //util.isSobreAviso ? SobreAvisoForm() : Container(),
-                      Util.isSobreAviso ? SobreAvisoForm() : Container(),
+                      Util.isSobreAviso ? NewSobreAviso() : Container(),
+                      _reserva ? Reserva() : Container(),
+
                       //mostrar rota safetyCase?
                       Util.showRotaSafetyCase ? RotaSafetyCase() : Container(),
                       Util.no767FSafety ? No767FSafetyCase() : Container(),
@@ -325,5 +393,13 @@ class _RbacHomeState extends State<RbacHome> {
         ),
       ),
     );
+  }
+
+  void resetPage(BuildContext context) {
+    return setState(() {
+      Util.gotoScreen(RbacHome(), context); //reinicia a propria pagina
+      Util.resetarDataHora();
+      Util.resetarVariaveis(); //reseta as variaveis ao estado inicial
+    });
   }
 }
