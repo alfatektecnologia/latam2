@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/rounded_picker.dart';
 import 'package:latam/utilitarios/utilitarios.dart';
+import 'package:provider/provider.dart';
 
 class ReservaForm extends StatefulWidget {
   @override
@@ -26,6 +27,7 @@ class _ReservaFormState extends State<ReservaForm> {
 
   @override
   Widget build(BuildContext context) {
+    Util util = Provider.of<Util>(context);
     var timeSelected;
     String newFormatedDate;
 
@@ -182,7 +184,13 @@ class _ReservaFormState extends State<ReservaForm> {
             RaisedButton(
                 //color: Color(0xff00005a),
                 onPressed: () {
-                  Util.hasTipoTripDefined = false;//reset
+                  setState(() {
+                    Util.hasTipoTripDefined = false;//reset
+                    Util.hasTipoTripDefined
+                        ? Util.tripRadio = Util.tripRadio + 0
+                        :util.setTipoTrip(-1);
+                  });
+
                   selectDate(context);
                 },
                 child: Text(
@@ -197,7 +205,12 @@ class _ReservaFormState extends State<ReservaForm> {
             RaisedButton(
                 //color: Color(0xff00005a),
                 onPressed: () {
-                  Util.hasTipoTripDefined = false;//reset
+                  setState(() {
+                    Util.hasTipoTripDefined = false;//reset
+                    Util.hasTipoTripDefined
+                        ? Util.tripRadio = Util.tripRadio + 0
+                        :util.setTipoTrip(-1);
+                  });
 
                   calendario(context);
                 },

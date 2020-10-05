@@ -45,9 +45,14 @@ class _SobreAvisoState extends State<SobreAviso> {
                                 ''; //reseto qualquer informação  de acionamento anterior
                             Util.radioValueSobreAviso = newValue;
                             // Util.resetarDataHora();
+                             Util.hasTipoTripDefined = false;
                             util.setSobreaviso(true);
+                            Util.sobreavisoTyped = true;
                             Util.sobreaviso = '1';
                             Util.hasSobreAviso = true;
+                             Util.hasTipoTripDefined
+                            ? Util.tripRadio = Util.tripRadio + 0
+                            : Util.tripRadio = -1;
                           });
 
                           print(newValue);
@@ -70,7 +75,13 @@ class _SobreAvisoState extends State<SobreAviso> {
                           util.setSobreaviso(false);
                           Util.sobreaviso = '0';
                           Util.hasSobreAviso = true;
-                          // Util.resetarDataHora();
+                          Util.sobreavisoTyped = true;
+                          Util.hasInicioSobreaviso = false;
+                          Util.hasTipoTripDefined = false;
+                           Util.hasTipoTripDefined
+                            ? Util.tripRadio = Util.tripRadio + 0
+                            : Util.tripRadio = -1;
+                          //Util.resetarDataHora();
                         });
 
                         print(newValue);

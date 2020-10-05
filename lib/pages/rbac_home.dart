@@ -36,7 +36,7 @@ class _RbacHomeState extends State<RbacHome> {
   bool _sobreaviso = false;
   bool _reserva = false;
 
-  bool showTripEscolha = false;
+
   bool showWarning = false;
 
   List<Jornada> myList = List();
@@ -49,13 +49,13 @@ class _RbacHomeState extends State<RbacHome> {
       Util.showRotaSafetyCase = false;
       _sobreaviso = false;
       _reserva = false;
-      showTripEscolha = false;
+      Util.showTripEscolha = false;
       showWarning = false;
       util.setSobreaviso(false);
       util.setReserva(false);
       Util.radioValueSobreAviso = -1;
       Util.radioValueReserva = -1;
-      showTripEscolha = false;
+      Util.showTripEscolha = false;
       Util.hasTipoTripDefined = false;
       Util.no767FSafety = false;
       Util.hasVooVolta = false;
@@ -80,7 +80,7 @@ class _RbacHomeState extends State<RbacHome> {
         showWarning = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         Util.isReserva = false;
-        showTripEscolha = true;
+        Util.showTripEscolha = true;
         Util.showLastro = true;
         Util.tripTTonly = false;
         Util.is767FSafety = false;
@@ -99,7 +99,7 @@ class _RbacHomeState extends State<RbacHome> {
         Util.hasReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         //Util.isReserva = false;
-        showTripEscolha = true;
+        Util.showTripEscolha = true;
         Util.showRotaSafetyCase = false;
         Util.showLastro = true;
         showWarning = false;
@@ -119,7 +119,7 @@ class _RbacHomeState extends State<RbacHome> {
         Util.hasReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         Util.isReserva = false;
-        showTripEscolha = false;
+        Util.showTripEscolha = false;
         Util.is767FSafety = false;
         showWarning = true;
         Util.hasTipoTripDefined = false;
@@ -140,7 +140,7 @@ class _RbacHomeState extends State<RbacHome> {
         Util.hasReserva = false;
         Util.isReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
-        showTripEscolha = false;
+        Util.showTripEscolha = false;
         Util.is767FSafety = false;
         showWarning = false;
         Util.no767FSafety = true;
@@ -159,12 +159,13 @@ class _RbacHomeState extends State<RbacHome> {
         Util.isReserva = false;
         Util.isSobreAviso = false; //apaga o form de sobreaviso
         Util.tripTTonly = false;
-        showTripEscolha = false;
+        Util.showTripEscolha = false;
         showWarning = false;
         util.setSobreaviso(false);
         util.setReserva(false);
+
         Util.is767FSafety = false;
-        showTripEscolha = false;
+        Util.showTripEscolha = false;
         Util.hasTipoTripDefined = false;
         Util.no767FSafety = false;
         Util.hasVooVolta = false;
@@ -238,25 +239,29 @@ class _RbacHomeState extends State<RbacHome> {
                                     size: 30,
                                   ),
                                   onTap: () {
-                                      Util.showRotaSafetyCase = false;
-                                      _sobreaviso = false;
-                                      _reserva = false;
-                                      Util.isReserva = false;
-                                      Util.hasReserva = false;
-                                      Util.isSobreAviso =
-                                          false; //apaga o form de sobreaviso
-                                      Util.tripTTonly = false;
-                                      showTripEscolha = false;
-                                      showWarning = false;
-                                      util.setSobreaviso(false);
-                                      util.setReserva(false);
-                                      Util.is767FSafety = false;
-                                      showTripEscolha = false;
-                                      Util.hasTipoTripDefined = false;
-                                      Util.no767FSafety = false;
-                                      Util.hasVooVolta = false;
-                                      Util.resetarVariaveis();
-                                    },
+                                    Util.showRotaSafetyCase = false;
+                                    _sobreaviso = false;
+                                    _reserva = false;
+                                    Util.isReserva = false;
+                                    Util.hasReserva = false;
+                                    Util.reservaTyped = false;
+                                    Util.sobreavisoTyped = false;
+                                    Util.isSobreAviso =
+                                        false; //apaga o form de sobreaviso
+                                    Util.tripTTonly = false;
+                                    Util.showTripEscolha = false;
+                                    showWarning = false;
+                                    util.setSobreaviso(false);
+                                    util.setReserva(false);
+                                    Util.is767FSafety = false;
+
+                                    Util.hasTipoTripDefined = false;
+                                    Util.no767FSafety = false;
+                                    Util.hasVooVolta = false;
+                                    Util.resetarVariaveis();
+                                    Util.resetarDataHora();
+                                    util.setTipoTrip( -1);
+                                  },
                                   onChanged: (String newSelectedEquipamento) {
                                     setState(() {
                                       _currentEquipamento =
@@ -325,21 +330,31 @@ class _RbacHomeState extends State<RbacHome> {
                                       Util.showRotaSafetyCase = false;
                                       _sobreaviso = false;
                                       _reserva = false;
+                                      util.setReserva(false);
+                                      Util.reserva = '0';
+
+                                      util.setTipoAcionamento(' ');
+                                      Util.acionado = ' ';
+                                      Util.tipoAcionamentoSobreaviso = " ";
                                       Util.isReserva = false;
                                       Util.hasReserva = false;
                                       Util.isSobreAviso =
                                           false; //apaga o form de sobreaviso
                                       Util.tripTTonly = false;
-                                      showTripEscolha = false;
+                                      Util.showTripEscolha = false;
                                       showWarning = false;
                                       util.setSobreaviso(false);
                                       util.setReserva(false);
+                                      Util.sobreavisoTyped = false;
+                                      Util.reservaTyped = false;
                                       Util.is767FSafety = false;
-                                      showTripEscolha = false;
+
                                       Util.hasTipoTripDefined = false;
+                                      util.setTipoTrip( -1);
                                       Util.no767FSafety = false;
                                       Util.hasVooVolta = false;
                                       Util.resetarVariaveis();
+                                      Util.resetarDataHora();
                                     },
                                     onChanged: (String newSelectedRota) {
                                       setState(() {
@@ -372,8 +387,8 @@ class _RbacHomeState extends State<RbacHome> {
                       //mostrar rota safetyCase?
                       Util.showRotaSafetyCase ? RotaSafetyCase() : Container(),
                       Util.no767FSafety ? No767FSafetyCase() : Container(),
-                      showTripEscolha ? TipoVoo() : Container(),
-                      showTripEscolha ? TipoTripulacao() : Container(),
+                      Util.showTripEscolha ? TipoVoo() : Container(),
+                      Util.showTripEscolha ? TipoTripulacao() : Container(),
 
                       Util.hasTipoTripDefined
                           ? EscolheTipoTrip(

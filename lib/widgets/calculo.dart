@@ -97,7 +97,7 @@ class Calculo {
         (dataVooIdaDecolagem == null &&
             safetyCase == '1' &&
             equipamento != 'B767F')) {
-              faltaDados = true;
+      faltaDados = true;
     }
 /*
     if(horaVooIdaDecolagem == null || horaVooIdaPouso == null){
@@ -111,7 +111,7 @@ class Calculo {
       faltaDados = true;
     }
 */
-    if(faltaDados){
+    if (faltaDados) {
       res = new Resultado(jornada: -1, voo: 'Preencha os campos');
       res.horarioLimiteCorteMotor = 'Preencha os campos';
       res.horarioLimiteCorteMotor2 = 'Preencha os campos';
@@ -180,20 +180,50 @@ class Calculo {
           horaVooVoltaPouso.millisecond);
     }
 
+    Duration tempoSobreAviso;
+    int sobreavisoQueSupera8Horas = 0;
+    if (horarioInicioSobreaviso != null && horarioTerminoSobreaviso != null) {
+      if (horarioInicioSobreaviso.compareTo(horarioTerminoSobreaviso) > 0) {
+        horarioTerminoSobreaviso =
+            horarioTerminoSobreaviso.add(Duration(days: 1));
+      }
+      tempoSobreAviso =
+          horarioTerminoSobreaviso.difference(horarioInicioSobreaviso);
+      //print('tempoSobreAviso: ' + tempoSobreAviso.toString());
+    } else {
+      tempoSobreAviso = new Duration(minutes: 0);
+    }
+
+
     if (equipamento != 'B767F' && safetyCase == '1') {
       //pax e safety case
+      //levar em consideracao debitar o sobreaviso
       res = new Resultado(
           jornada: 17,
           voo: rotaSafetyCase == '0' ? '14:00 horas' : '16:00 horas');
       if (dataVooIdaDecolagem != null) {
         DateTime d = dataVooIdaDecolagem.add(new Duration(hours: 17));
 
-        res.horarioLimiteTerminoJornada =
-            DateFormat('HH:mm').format(d) + ' horas';
+        if (sobreaviso == '1') {
+              sobreavisoQueSupera8Horas = tempoSobreAviso.inMinutes - (8 * 60);
+        }
+
+        if (sobreavisoQueSupera8Horas > 0) {
+          d = dataVooIdaDecolagem.add(
+              new Duration(minutes: (res.jornada * 60).toInt()) -
+                  Duration(minutes: sobreavisoQueSupera8Horas));
+          res.horarioLimiteTerminoJornada =
+              DateFormat('HH:mm').format(d) + ' horas';
+
+        } else {
+          res.horarioLimiteTerminoJornada =
+              DateFormat('HH:mm').format(d) + ' horas';
+        }
         res.horarioLimiteCorteMotor =
             DateFormat('HH:mm').format(d.add(new Duration(minutes: -45))) +
                 ' horas';
       }
+
       if (res.horarioLimiteCorteMotor == null)
         res.horarioLimiteCorteMotor = 'Preencha os campos';
       if (res.horarioLimiteTerminoJornada == null)
@@ -234,20 +264,6 @@ class Calculo {
         }
       }
 
-      Duration tempoSobreAviso;
-      int sobreavisoQueSupera8Horas = 0;
-      if (horarioInicioSobreaviso != null && horarioTerminoSobreaviso != null) {
-        if (horarioInicioSobreaviso.compareTo(horarioTerminoSobreaviso) > 0) {
-          horarioTerminoSobreaviso =
-              horarioTerminoSobreaviso.add(Duration(days: 1));
-        }
-        tempoSobreAviso =
-            horarioTerminoSobreaviso.difference(horarioInicioSobreaviso);
-        //print('tempoSobreAviso: ' + tempoSobreAviso.toString());
-      } else {
-        tempoSobreAviso = new Duration(minutes: 0);
-      }
-
       if (sobreaviso == '1') {
         //esta de sobreaviso
         if (acionado == '0' || acionado == '1') {
@@ -257,12 +273,16 @@ class Calculo {
             res.jornada = 16; //calcular o tempo de sobre aviso, fazer 16- isso
           } else {
             //tripulacao composta ou revezamento
-            sobreavisoQueSupera8Horas = tempoSobreAviso.inMinutes - (8 * 60);
-            //if (sobreavisoQueSupera8Horas > 0) {
-
-            //res.jornada = ((res.jornada * 60) - sobreavisoQueSupera8Horas) /
-            //  60; //verificar
-            //}
+            int sobreavisoQueSupera8Horas =
+                tempoSobreAviso.inMinutes - (8 * 60);
+            if (sobreavisoQueSupera8Horas > 0) {
+              //print('jornada antes: ' + res.jornada.toString());
+              res.jornada = ((res.jornada * 60) - sobreavisoQueSupera8Horas) /
+                  60; //verificar
+              //print('tempo sobreaviso: ' + tempoSobreAviso.inMinutes.toString());
+              //print('mais que 8: ' + sobreavisoQueSupera8Horas.toString());
+              //print('jornada: ' + res.jornada.toString());
+            }
           }
         }
       }
@@ -281,10 +301,10 @@ class Calculo {
                 Duration(minutes: sobreavisoQueSupera8Horas));
       }
 
-      Duration timeBetweenPousoELimite =
-          horarioLimiteJornada.add(new Duration(minutes: destino == 'DOM' ? -30 : -45)).difference(dataVooIdaPouso);
-      
-      
+      Duration timeBetweenPousoELimite = horarioLimiteJornada
+          .add(new Duration(minutes: destino == 'DOM' ? -30 : -45))
+          .difference(dataVooIdaPouso);
+
       int lastroNegativo = 0;
       int lastroEmMinutos = 0;
 
@@ -292,8 +312,8 @@ class Calculo {
         lastroNegativo = 1;
         timeBetweenPousoELimite = timeBetweenPousoELimite * -1;
 
-        lastroEmMinutos =
-            timeBetweenPousoELimite.inMinutes;// + (destino == 'DOM' ? 30 : 45);
+        lastroEmMinutos = timeBetweenPousoELimite
+            .inMinutes; // + (destino == 'DOM' ? 30 : 45);
       } else {
         lastroEmMinutos =
             timeBetweenPousoELimite.inMinutes; //- (destino == 'DOM' ? 30 : 45);
@@ -310,8 +330,8 @@ class Calculo {
       res.lastro = DateFormat('HH:mm').format(lastroTemp);
       if (lastroNegativo == 1) {
         res.lastro = '-' + DateFormat('HH:mm').format(lastroTemp);
-      Util.lastroNegativo=true;
-      }else {Util.lastroNegativo=false;}
+       Util.lastro2Negativo=true;
+          }else {Util.lastro2Negativo=false;}
       res.lastroNegativo = lastroNegativo == 1;
 
       if (tripulacao == 'SIMPLES' || fusos == 'MENOS') {
@@ -347,8 +367,9 @@ class Calculo {
           DateTime horarioLimiteJornada2 = dataVooVoltaDecolagem
               .add(new Duration(minutes: res2.jornada.toInt() * 60));
 
-          Duration timeBetweenPousoELimite2 =
-              horarioLimiteJornada2.add(new Duration(minutes: destino == 'DOM' ? -30 : -45)).difference(dataVooVoltaPouso);
+          Duration timeBetweenPousoELimite2 = horarioLimiteJornada2
+              .add(new Duration(minutes: destino == 'DOM' ? -30 : -45))
+              .difference(dataVooVoltaPouso);
 
           int lastroNegativo2 = 0;
           int lastroEmMinutos2 = 0;
@@ -357,9 +378,11 @@ class Calculo {
             lastroNegativo2 = 1;
             timeBetweenPousoELimite2 = timeBetweenPousoELimite2 * -1;
 
-            lastroEmMinutos2 = timeBetweenPousoELimite2.inMinutes;// + (destino == 'DOM' ? 30 : 45);
+            lastroEmMinutos2 = timeBetweenPousoELimite2
+                .inMinutes; // + (destino == 'DOM' ? 30 : 45);
           } else {
-            lastroEmMinutos2 = timeBetweenPousoELimite2.inMinutes;// - (destino == 'DOM' ? 30 : 45);
+            lastroEmMinutos2 = timeBetweenPousoELimite2
+                .inMinutes; // - (destino == 'DOM' ? 30 : 45);
           }
 
           DateTime lastroTemp2 =
@@ -375,7 +398,7 @@ class Calculo {
           res.lastro2 = DateFormat('HH:mm').format(lastroTemp2);
           if (lastroNegativo2 == 1) {
             res.lastro2 = '-' + DateFormat('HH:mm').format(lastroTemp2);
-          Util.lastro2Negativo=true;
+           Util.lastro2Negativo=true;
           }else {Util.lastro2Negativo=false;}
           res.lastro2Negativo = lastroNegativo2 == 1;
         }
@@ -412,6 +435,7 @@ class Calculo {
 
   Resultado performQuery(String equipamento, String tripulacao, String etapas,
       String funcao, String fusos, String safetyCase, int hora) {
+    int k = 1;
     if (equipamento == 'A350' &&
         tripulacao == 'SIMPLES' &&
         etapas == '1 OU 2' &&
